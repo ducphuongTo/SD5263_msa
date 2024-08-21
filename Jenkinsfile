@@ -2,6 +2,14 @@ pipeline {
     agent {
         label 'devops-prac'
     }
+    environment {
+        AWS_REGION = 'ap-northeast-1'
+        ECR_REGISTRY = "529088254389.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        ECR_REPOSITORY_FE = "${ECR_REGISTRY}/practical-devops-latest"
+        ECR_REPOSITORY_BE = "${ECR_REGISTRY}/practical-devops:be-latest"
+        AWS_CREDS = credentials('aws-creds')
+    }
+
     stages {
         stage('Build Front End Image') {
             steps {
@@ -36,6 +44,18 @@ pipeline {
                 # Push the image to ECR
                 docker push 529088254389.dkr.ecr.ap-northeast-1.amazonaws.com/practical-devops:be-latest
                 '''
+            }
+        }
+
+        stage('Deploy k8s') {
+            agent any
+            steps {
+                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDS}") {
+                    sh "aws eks update-kubeconfig --name deveks-phuong"
+                    sh "kubectl apply -f k8s/aws/mongodb.yaml"
+                    sh "kubectl apply -f k8s/aws/backend.yaml"
+                    sh "kubectl apply -f k8s/aws/frontend.yaml"
+                }
             }
         }
     }
