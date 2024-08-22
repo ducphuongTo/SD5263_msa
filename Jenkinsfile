@@ -7,6 +7,7 @@ pipeline {
         ECR_REGISTRY = "529088254389.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECR_REPOSITORY_FE = "${ECR_REGISTRY}/practical-devops-latest"
         ECR_REPOSITORY_BE = "${ECR_REGISTRY}/practical-devops:be-latest"
+        KUBECONFIG = "${WORKSPACE}/.kube/config"
     }
 
     stages {
@@ -47,6 +48,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     withAWS(region: "${AWS_REGION}", credentials: "aws-creds") {
+                        sh 'mkdir -p ${WORKSPACE}/.kube'
                         sh 'aws eks update-kubeconfig --region ap-northeast-1 --name deveks-phuong'
                         sh 'kubectl apply -f k8s/aws/mongodb.yaml'
                         sh 'kubectl apply -f k8s/aws/backend.yaml'
