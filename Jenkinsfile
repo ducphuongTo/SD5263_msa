@@ -7,7 +7,6 @@ pipeline {
         ECR_REGISTRY = "529088254389.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECR_REPOSITORY_FE = "${ECR_REGISTRY}/practical-devops-latest"
         ECR_REPOSITORY_BE = "${ECR_REGISTRY}/practical-devops:be-latest"
-        AWS_CREDS = credentials('aws-creds')
     }
 
     stages {
@@ -46,7 +45,7 @@ pipeline {
         stage('Deploy k8s') {
             agent any
             steps {
-                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDS}") {
+                withAWS(region: "${AWS_REGION}", credentials: "aws-creds") {
                     sh "aws eks update-kubeconfig --name deveks-phuong"
                     sh "kubectl apply -f k8s/aws/mongodb.yaml"
                     sh "kubectl apply -f k8s/aws/backend.yaml"
