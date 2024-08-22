@@ -51,9 +51,9 @@ pipeline {
                         withEnv(["KUBECONFIG=/home/ec2-user/jenkins-agent/workspace/devop-practive@2/.kube/config"]) {
                             sh "aws eks update-kubeconfig --region ap-northeast-1 --name deveks-phuong"
                         }
-                        sh 'kubectl apply -f k8s/aws/mongodb.yaml'
-                        sh 'kubectl apply -f k8s/aws/backend.yaml'
-                        sh 'kubectl apply -f k8s/aws/frontend.yaml'
+                        sh 'kubectl apply -f k8s/aws/mongodb.yaml --validate=false'
+                        sh 'kubectl apply -f k8s/aws/backend.yaml --validate=false'
+                        sh 'kubectl apply -f k8s/aws/frontend.yaml --validate=false'
                     }
                 }
             }
