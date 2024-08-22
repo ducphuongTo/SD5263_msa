@@ -49,7 +49,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     withAWS(region: "${AWS_REGION}", credentials: "aws-creds") {
                         withEnv(["KUBECONFIG=/home/ec2-user/jenkins-agent/workspace/devop-practive@2/.kube/config"]) {
-                            sh "aws eks update-kubeconfig --region ap-northeast-1 --name deveks-phuong"
+                            sh "aws eks update-kubeconfig --region ap-northeast-1 --name eks-phuong"
                         }
                         sh 'kubectl apply -f k8s/aws/mongodb.yaml'
                         sh 'kubectl apply -f k8s/aws/backend.yaml'
