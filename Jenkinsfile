@@ -47,9 +47,9 @@ pipeline {
             steps {
                 withAWS(region: "${AWS_REGION}", credentials: "aws-creds") {
                     sh "aws eks update-kubeconfig --name deveks-phuong"
-                    sh "kubectl apply -f k8s/aws/mongodb.yaml"
-                    sh "kubectl apply -f k8s/aws/backend.yaml"
-                    sh "kubectl apply -f k8s/aws/frontend.yaml"
+                    sh "kubectl apply -f k8s/aws/mongodb.yaml --validate=false"
+                    sh "kubectl apply -f k8s/aws/backend.yaml --validate=false"
+                    sh "kubectl apply -f k8s/aws/frontend.yaml --validate=false"
                 }
             }
         }
