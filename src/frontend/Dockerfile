@@ -5,8 +5,8 @@ ENV DANGEROUSLY_DISABLE_HOST_CHECK=true
 WORKDIR /usr/src/app
 
 # Copy dependency definitions
-COPY src/frontend/package.json /usr/src/app/
-COPY src/frontend/package-lock.json /usr/src/app/
+COPY package.json /usr/src/app
+COPY package-lock.json /usr/src/app
 
 
 # Install dependecies
